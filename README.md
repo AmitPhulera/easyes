@@ -11,10 +11,15 @@ The data structures for which this is built are present in tests/mockData direct
 
 
 ## Use ##
-
-- Intialization 
+- Installation
 ```
-const {EasyES} = require('easyes');
+npm i @amitphulera/easyes
+```
+- Intialization 
+
+```
+npm i @amitphulera/easyes
+const {EasyES} = require('@amitphulera/easyes');
 // Iniitialise with you AWS elasticsearch domain and region
 const es = new EasyES(
     'https://some-elasticsearchcluster-somerandomid.us-west-2.es.amazonaws.com',

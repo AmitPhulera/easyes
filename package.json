@@ -1,5 +1,5 @@
 {
-  "name": "easy-es",
+  "name": "@amitphulera/easyes",
   "version": "1.0.0",
   "description": "Library to simplify elastic search operations easy.",
   "main": "app.js",
