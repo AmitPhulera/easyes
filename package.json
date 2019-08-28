@@ -1,0 +1,25 @@
+{
+  "name": "easy-es",
+  "version": "1.0.0",
+  "description": "Library to simplify elastic search operations easy.",
+  "main": "app.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha tests/**/*.test.js tests/*.test.js"
+  },
+  "author": "Amit Phulera <amitphulera999@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@elastic/elasticsearch": "^6.8.0",
+    "aws-sdk": "^2.474.0",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.25"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.3",
+    "mocha": "^6.2.0",
+    "sinon": "^7.4.1"
+  }
+}
