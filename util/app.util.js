@@ -184,7 +184,26 @@ function generateESObj(record) {
   const index = `${siteId}_data_${day}`;
   return [{ index: { _id: id, _index: index, _type: '_doc' } }, record];
 }
-
+/**
+ * @function getMonths
+ * @param {string} startTime
+ * @param {string} endTime
+ * @description given two timestamps the functions returns dates
+ * between them.
+ * @returns {array} an array of dates is returned
+ */
+function getMonths(startTime, endTime) {
+  let start = moment(startTime).startOf('month');
+  const end = moment(endTime).startOf('month');
+  if (start.isAfter(end)) throw Error('Start time greater than end time');
+  const acc = [];
+  while (start.isSameOrBefore(end)) {
+    acc.push(start.format('YYYY-MM'));
+    start = start.add(1, 'month');
+  }
+  if (acc.length === 0) acc.push('*');
+  return acc;
+}
 /**
  * @function getRelevantIndexes
  * @param {Object} obj sails-dynamo like query object
@@ -216,8 +235,41 @@ function getRelevantIndexes(obj) {
   }
   return indexList.split(',');
 }
+/**
+ * @function getRelevantMonthIndexes
+ * @param {Object} obj sails-dynamo like query object
+ * @description based on search object figures out relevant indexes that should be queried
+ */
+function getRelevantMonthIndexes(obj) {
+  let indexList = '';
+  let prefix = '';
+  if (obj.siteId) prefix = `${obj.siteId}_data_`;
+  else prefix = '*_data_';
+  if (!obj.timestamp) indexList = `${prefix}*`;
+  else {
+    const { timestamp } = obj;
+    let monthsArr = [];
+    if (timestamp.gte || timestamp.gt) {
+      monthsArr = getMonths(timestamp.gte, moment().format('YYYY-MM-DD'));
+    } else if (timestamp.between) {
+      monthsArr = getMonths(timestamp.between[0], timestamp.between[1]);
+    } else {
+      monthsArr = ['*'];
+    }
+    indexList = monthsArr.reduce((prev, curr) => {
+      let str = '';
+      if (!prev) str = `${prefix}${curr}`;
+      else str = `${prev},${prefix}${curr}`;
+      return str;
+    }, '');
+  }
+  return indexList.split(',');
+}
+
 module.exports = {
   getRelevantIndexes,
+  getMonths,
+  getRelevantMonthIndexes,
   generateESObj,
   filterResponse,
   dataDeviceFormat,

@@ -238,4 +238,52 @@ describe.only('app.util.test.js test suit', () => {
       assert.deepEqual(out, correctOut);
     });
   });
+  describe('getMonths', () => {
+    it('will return an array with months in format YYYY-MM', () => {
+      const out = util.getMonths('2019-01-01', '2019-01-01');
+      assert.isArray(out);
+      const correctOut = ['2019-01'];
+      assert.deepEqual(out, correctOut);
+    });
+    it('will throw an Error as start time will be more than end time', () => {
+      assert.throws(() => {
+        util.getDates('2019-02-01', '2019-01-01');
+      });
+    });
+  });
+  describe('getRelevantMonthIndexes', () => {
+    it('will generate perfect index array when all parameters are provided', () => {
+      const out = util.getRelevantMonthIndexes({
+        deviceId: 'abc',
+        siteId: 'axy',
+        timestamp: {
+          between: ['2019-01-01', '2019-01-05'],
+        },
+      });
+      const correctOut = [
+        'axy_data_2019-01'
+      ];
+      assert.deepEqual(out, correctOut);
+    });
+    it('will generalize siteId when siteId is not provided', () => {
+      const out = util.getRelevantMonthIndexes({
+        deviceId: 'abc',
+        timestamp: {
+          between: ['2019-01-01', '2019-01-05'],
+        },
+      });
+      const correctOut = [
+        '*_data_2019-01',
+      ];
+      assert.deepEqual(out, correctOut);
+    });
+    it('will genralize timestamp when timestamp is not provided', () => {
+      const out = util.getRelevantMonthIndexes({
+        deviceId: 'abc',
+        siteId: 'xyz',
+      });
+      const correctOut = ['xyz_data_*'];
+      assert.deepEqual(out, correctOut);
+    });
+  });
 });

@@ -11,7 +11,7 @@ const app = require('../app.js');
 const util = require('../util/app.util');
 const mock = require('./mockData/esData');
 
-describe.only('app.js Test Suite', () => {
+describe('app.js Test Suite', () => {
   let esClient = {};
   let ez;
   before(() => {

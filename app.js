@@ -89,7 +89,9 @@ class EasyES {
     if (!searchObj) throw Error({ message: 'No search Object specified' });
     try {
       const body = util.buildQueryBody(searchObj);
-      const index = util.getRelevantIndexes(searchObj);
+      const dayIndexes = util.getRelevantIndexes(searchObj);
+      const monthIndexes = util.getRelevantMonthIndexes(searchObj);
+      const index = [...(new Set(...dayIndexes, ...monthIndexes))];
       let { size, sort } = options;
       const { format } = options;
       if (!size || size === -1) {
